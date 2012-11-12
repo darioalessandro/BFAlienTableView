@@ -18,6 +18,8 @@
 		062C3F00165075580090CB27 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 062C3EFF165075580090CB27 /* Default-568h@2x.png */; };
 		062C3F03165075580090CB27 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 062C3F01165075580090CB27 /* MainStoryboard.storyboard */; };
 		062C3F06165075580090CB27 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 062C3F05165075580090CB27 /* ViewController.m */; };
+		062C3F0E165075FD0090CB27 /* BFAlienCellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 062C3F0D165075FD0090CB27 /* BFAlienCellBackgroundView.m */; };
+		062C3F10165078E80090CB27 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 062C3F0F165078E80090CB27 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,9 @@
 		062C3F02165075580090CB27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		062C3F04165075580090CB27 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		062C3F05165075580090CB27 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		062C3F0C165075FD0090CB27 /* BFAlienCellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFAlienCellBackgroundView.h; sourceTree = "<group>"; };
+		062C3F0D165075FD0090CB27 /* BFAlienCellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFAlienCellBackgroundView.m; sourceTree = "<group>"; };
+		062C3F0F165078E80090CB27 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				062C3F10165078E80090CB27 /* QuartzCore.framework in Frameworks */,
 				062C3EEA165075570090CB27 /* UIKit.framework in Frameworks */,
 				062C3EEC165075570090CB27 /* Foundation.framework in Frameworks */,
 				062C3EEE165075570090CB27 /* CoreGraphics.framework in Frameworks */,
@@ -56,6 +62,7 @@
 		062C3EDA165075570090CB27 = {
 			isa = PBXGroup;
 			children = (
+				062C3F0F165078E80090CB27 /* QuartzCore.framework */,
 				062C3EEF165075570090CB27 /* BFAlienTableView */,
 				062C3EE8165075570090CB27 /* Frameworks */,
 				062C3EE6165075570090CB27 /* Products */,
@@ -89,6 +96,8 @@
 				062C3F04165075580090CB27 /* ViewController.h */,
 				062C3F05165075580090CB27 /* ViewController.m */,
 				062C3EF0165075580090CB27 /* Supporting Files */,
+				062C3F0C165075FD0090CB27 /* BFAlienCellBackgroundView.h */,
+				062C3F0D165075FD0090CB27 /* BFAlienCellBackgroundView.m */,
 			);
 			path = BFAlienTableView;
 			sourceTree = "<group>";
@@ -176,6 +185,7 @@
 				062C3EF6165075580090CB27 /* main.m in Sources */,
 				062C3EFA165075580090CB27 /* AppDelegate.m in Sources */,
 				062C3F06165075580090CB27 /* ViewController.m in Sources */,
+				062C3F0E165075FD0090CB27 /* BFAlienCellBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
