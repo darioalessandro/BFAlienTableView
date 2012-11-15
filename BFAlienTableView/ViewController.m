@@ -21,6 +21,7 @@
     if(!cell){
         cell= [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellStr];
         [cell setContentMode:UIViewContentModeRedraw];
+        [cell setClipsToBounds:TRUE];
     }
     BFAlienCellBackgroundView * view= [[BFAlienCellBackgroundView alloc] initWithFrame:cell.frame];
     BFAlienCellBackgroundViewPosition position;
@@ -40,7 +41,13 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [cell setNeedsDisplay];
+
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    for(UITableViewCell * cell in [self.tableView visibleCells]){
+        [[cell backgroundView] setNeedsDisplay];
+    }
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

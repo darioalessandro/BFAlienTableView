@@ -17,6 +17,7 @@ typedef enum  {
     UIColor *borderColor;
     UIColor *fillColor;
     BFAlienCellBackgroundViewPosition position;
+    CGGradientRef alienGradient;
 }
 
 @property(nonatomic, retain) UIColor *borderColor, *fillColor;

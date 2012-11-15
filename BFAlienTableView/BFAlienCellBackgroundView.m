@@ -20,7 +20,7 @@
     return NO;
 }
 
--(void)CreateAlienGradient:(CGGradientRef *)alienGradient{
+-(void)CreateAlienGradient:(CGGradientRef *)gradient{
     size_t num_locations = 4;
     CGFloat locations[4] = { 0.0, 0.03, 0.85, 1.0 };
     CGFloat components[16] = {0.08, 0.07, 0.26, 1,  // Start color
@@ -29,7 +29,7 @@
                               1.00, 1.00, 1.00, 1}; // End color
     
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
-    *alienGradient = CGGradientCreateWithColorComponents(rgbColorspace, components, locations, num_locations);
+    *gradient = CGGradientCreateWithColorComponents(rgbColorspace, components, locations, num_locations);
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -39,9 +39,8 @@
     
     CGContextSetFillColorWithColor(c, [[UIColor colorWithRed:0.22 green:0.27 blue:0.54 alpha:1] CGColor]);
     CGContextSetStrokeColorWithColor(c, [[UIColor clearColor] CGColor]);
-    CGContextSetLineWidth(c, 2);
-    CGGradientRef alienGradient;
-    [self CreateAlienGradient:&alienGradient];
+    if(alienGradient==NULL)
+        [self CreateAlienGradient:&alienGradient];
     if (position == BFAlienCellBackgroundViewPositionTop) {
         
     	CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
@@ -89,6 +88,18 @@
     	CGContextAddLineToPoint(c, minx, maxy);
         CGContextClosePath(c);
     	CGContextDrawPath(c, kCGPathFillStroke);
+    }else if(position==BFAlienCellBackgroundViewPositionSingle){
+        CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
+        CGFloat miny = CGRectGetMinY(rect) , maxy = CGRectGetMaxY(rect) ;
+        CGFloat midy = CGRectGetMidY(rect);
+        
+        CGContextMoveToPoint(c, minx, midy);
+        CGContextAddArcToPoint(c, minx, miny, midx, miny, ROUND_SIZE);
+        CGContextAddArcToPoint(c, maxx, miny, maxx, midy, ROUND_SIZE);
+        CGContextAddArcToPoint(c, maxx, maxy, midx, maxy, ROUND_SIZE);
+        CGContextAddArcToPoint(c, minx, maxy, minx, midy, ROUND_SIZE);
+        CGContextClosePath(c);
+        CGContextDrawPath(c, kCGPathFillStroke);
     }
     
     CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
@@ -102,35 +113,25 @@
     maxy=maxy-10;
     
     CGContextMoveToPoint(c, minx, midy);
-    // Add an arc through 2 to 3
     CGContextAddArcToPoint(c, minx, miny, midx, miny, ROUND_SIZE);
-    // Add an arc through 4 to 5
     CGContextAddArcToPoint(c, maxx, miny, maxx, midy, ROUND_SIZE);
-    // Add an arc through 6 to 7
     CGContextAddArcToPoint(c, maxx, maxy, midx, maxy, ROUND_SIZE);
-    // Add an arc through 8 to 9
     CGContextAddArcToPoint(c, minx, maxy, minx, midy, ROUND_SIZE);
     CGContextClosePath(c);
+    
     CGContextSetStrokeColorWithColor(c, [UIColor clearColor].CGColor);
     CGContextSetShadow(c, CGSizeMake(0,4), 6);
     CGContextDrawPath(c, kCGPathFillStroke);
     
-    // Start at 1
     CGContextMoveToPoint(c, minx, midy);
-    // Add an arc through 2 to 3
     CGContextAddArcToPoint(c, minx, miny, midx, miny, ROUND_SIZE);
-    // Add an arc through 4 to 5
     CGContextAddArcToPoint(c, maxx, miny, maxx, midy, ROUND_SIZE);
-    // Add an arc through 6 to 7
     CGContextAddArcToPoint(c, maxx, maxy, midx, maxy, ROUND_SIZE);
-    // Add an arc through 8 to 9
     CGContextAddArcToPoint(c, minx, maxy, minx, midy, ROUND_SIZE);
-    // Close the path
     CGContextClosePath(c);
     CGContextClip(c);
     CGContextDrawLinearGradient(c, alienGradient, CGPointMake(midx, maxy), CGPointMake(midx, 0), kCGGradientDrawsAfterEndLocation);
 
-    // Fill & stroke the path
     CGContextDrawPath(c, kCGPathFillStroke);
     
 
