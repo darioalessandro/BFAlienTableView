@@ -121,20 +121,18 @@ static NSMutableDictionary * _cachedRenders;
     NSString * key=[self keyForRect:rect andPosition:viewPosition];
     UIImage * cachedRender=[_cachedRenders objectForKey:key];
     if(!cachedRender){
-        UIGraphicsBeginImageContext(rect.size);
+        UIGraphicsBeginImageContextWithOptions(rect.size, NO, [UIScreen mainScreen].scale) ;
         CGContextRef c = UIGraphicsGetCurrentContext();
         CGAffineTransform flipVertical = CGAffineTransformMake(
                                                                1, 0, 0, -1, 0, rect.size.height
                                                                );
         CGContextConcatCTM(c, flipVertical);
-        
         CGContextSetFillColorWithColor(c, [[UIColor colorWithRed:0.22 green:0.27 blue:0.54 alpha:1] CGColor]);
         CGContextSetStrokeColorWithColor(c, [[UIColor clearColor] CGColor]);
         if(alienGradient==NULL)
             [self CreateAlienGradient:&alienGradient];
         if (position == BFAlienCellBackgroundViewPositionTop) {
             [self drawOuterCanvasInRect:rect withTopPositionInContext:c];
-
         } else if (position == BFAlienCellBackgroundViewPositionBottom) {
             [self drawOuterCanvasInRect:rect withBottomPositionInContext:c];
         } else if (position == BFAlienCellBackgroundViewPositionMiddle) {
@@ -161,7 +159,7 @@ static NSMutableDictionary * _cachedRenders;
         CGContextClosePath(c);
     
         CGContextSetStrokeColorWithColor(c, [UIColor clearColor].CGColor);
-        CGContextSetShadow(c, CGSizeMake(0,4), 6);
+        CGContextSetShadow(c, CGSizeMake(0,-4), 6);
         CGContextDrawPath(c, kCGPathFillStroke);
     
         CGContextMoveToPoint(c, minx, midy);
