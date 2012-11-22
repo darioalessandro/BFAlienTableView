@@ -21,25 +21,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BFAlienTableView/BFAlienCellBackgroundView.m"
-         timestampString = "374381515.523627"
+         timestampString = "375249598.30326"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "36"
-         endingLineNumber = "36"
-         landmarkName = "-drawRect:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BFAlienTableView/BFAlienCellBackgroundView.m"
-         timestampString = "374383243.152796"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "39"
-         endingLineNumber = "39"
-         landmarkName = "-drawRect:"
+         startingLineNumber = "51"
+         endingLineNumber = "51"
+         landmarkName = "-backgroundImageForRect:andPosition:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
