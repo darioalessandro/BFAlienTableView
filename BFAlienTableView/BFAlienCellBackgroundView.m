@@ -12,7 +12,7 @@ static NSMutableDictionary * _cachedRenders;
 
 @implementation BFAlienCellBackgroundView
 
-@synthesize borderColor, fillColor, position;
+@synthesize borderColor, fillColor;
 
 #pragma mark -
 #pragma mark initialization
@@ -50,6 +50,13 @@ static NSMutableDictionary * _cachedRenders;
 
 -(NSString *)keyForRect:(CGRect)rect andPosition:(BFAlienCellBackgroundViewPosition)viewPosition{
     return [NSString stringWithFormat:@"%@ %d", NSStringFromCGRect(rect), (NSInteger)viewPosition];
+}
+
+-(void)setPosition:(BFAlienCellBackgroundViewPosition)newPosition{
+    if(_position!=newPosition){
+        _position=newPosition;
+        [self setNeedsDisplay];
+    }
 }
 
 -(void)drawOuterCanvasInRect:(CGRect)rect withTopPositionInContext:(CGContextRef)ctx {
@@ -117,61 +124,69 @@ static NSMutableDictionary * _cachedRenders;
     CGContextDrawPath(ctx, kCGPathFillStroke);
 }
 
+-(void)drawInnerRowAndShadowInRect:(CGRect)rect inContext:(CGContextRef)ctx{
+    
+    CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
+    CGFloat miny = CGRectGetMinY(rect) , maxy = CGRectGetMaxY(rect) ;
+    CGFloat midy = CGRectGetMidY(rect);
+    
+    minx=minx+10;
+    miny=miny+10;
+    midx=midx-10;
+    maxx=maxx-10;
+    maxy=maxy-10;
+    
+    CGContextMoveToPoint(ctx, minx, midy);
+    CGContextAddArcToPoint(ctx, minx, miny, midx, miny, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, maxx, miny, maxx, midy, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, maxx, maxy, midx, maxy, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, minx, maxy, minx, midy, ROUND_SIZE);
+    CGContextClosePath(ctx);
+    
+    CGContextSetStrokeColorWithColor(ctx, [UIColor clearColor].CGColor);
+    CGContextSetShadow(ctx, CGSizeMake(0,-4), 6);
+    CGContextDrawPath(ctx, kCGPathFillStroke);
+    
+    CGContextMoveToPoint(ctx, minx, midy);
+    CGContextAddArcToPoint(ctx, minx, miny, midx, miny, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, maxx, miny, maxx, midy, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, maxx, maxy, midx, maxy, ROUND_SIZE);
+    CGContextAddArcToPoint(ctx, minx, maxy, minx, midy, ROUND_SIZE);
+    CGContextClosePath(ctx);
+    CGContextClip(ctx);
+    CGContextDrawLinearGradient(ctx, alienGradient, CGPointMake(midx, maxy), CGPointMake(midx, 0), kCGGradientDrawsAfterEndLocation);
+    
+    CGContextDrawPath(ctx, kCGPathFillStroke);
+}
+
+-(void)configureContext:(CGContextRef)ctx withRect:(CGRect)rect{
+    CGAffineTransform flipVertical = CGAffineTransformMake(
+                                                           1, 0, 0, -1, 0, rect.size.height
+                                                           );
+    CGContextConcatCTM(ctx, flipVertical);
+    CGContextSetFillColorWithColor(ctx, [[UIColor colorWithRed:0.22 green:0.27 blue:0.54 alpha:1] CGColor]);
+    CGContextSetStrokeColorWithColor(ctx, [[UIColor clearColor] CGColor]);
+}
+
 -(CGImageRef)backgroundImageForRect:(CGRect)rect andPosition:(BFAlienCellBackgroundViewPosition)viewPosition{
     NSString * key=[self keyForRect:rect andPosition:viewPosition];
     UIImage * cachedRender=[_cachedRenders objectForKey:key];
     if(!cachedRender){
         UIGraphicsBeginImageContextWithOptions(rect.size, NO, [UIScreen mainScreen].scale) ;
         CGContextRef c = UIGraphicsGetCurrentContext();
-        CGAffineTransform flipVertical = CGAffineTransformMake(
-                                                               1, 0, 0, -1, 0, rect.size.height
-                                                               );
-        CGContextConcatCTM(c, flipVertical);
-        CGContextSetFillColorWithColor(c, [[UIColor colorWithRed:0.22 green:0.27 blue:0.54 alpha:1] CGColor]);
-        CGContextSetStrokeColorWithColor(c, [[UIColor clearColor] CGColor]);
+        [self configureContext:c withRect:rect];
         if(alienGradient==NULL)
             [self CreateAlienGradient:&alienGradient];
-        if (position == BFAlienCellBackgroundViewPositionTop) {
+        if (viewPosition == BFAlienCellBackgroundViewPositionTop) {
             [self drawOuterCanvasInRect:rect withTopPositionInContext:c];
-        } else if (position == BFAlienCellBackgroundViewPositionBottom) {
+        } else if (viewPosition == BFAlienCellBackgroundViewPositionBottom) {
             [self drawOuterCanvasInRect:rect withBottomPositionInContext:c];
-        } else if (position == BFAlienCellBackgroundViewPositionMiddle) {
+        } else if (viewPosition == BFAlienCellBackgroundViewPositionMiddle) {
             [self drawOuterCanvasInRect:rect withMiddlePositionInContext:c];
-        }else if(position==BFAlienCellBackgroundViewPositionSingle){
+        }else if(viewPosition==BFAlienCellBackgroundViewPositionSingle){
             [self drawOuterCanvasInRect:rect withSinglePositionInContext:c];
         }
-    
-        CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
-        CGFloat miny = CGRectGetMinY(rect) , maxy = CGRectGetMaxY(rect) ;
-        CGFloat midy = CGRectGetMidY(rect);
-    
-        minx=minx+10;
-        miny=miny+10;
-        midx=midx-10;
-        maxx=maxx-10;
-        maxy=maxy-10;
-    
-        CGContextMoveToPoint(c, minx, midy);
-        CGContextAddArcToPoint(c, minx, miny, midx, miny, ROUND_SIZE);
-        CGContextAddArcToPoint(c, maxx, miny, maxx, midy, ROUND_SIZE);
-        CGContextAddArcToPoint(c, maxx, maxy, midx, maxy, ROUND_SIZE);
-        CGContextAddArcToPoint(c, minx, maxy, minx, midy, ROUND_SIZE);
-        CGContextClosePath(c);
-    
-        CGContextSetStrokeColorWithColor(c, [UIColor clearColor].CGColor);
-        CGContextSetShadow(c, CGSizeMake(0,-4), 6);
-        CGContextDrawPath(c, kCGPathFillStroke);
-    
-        CGContextMoveToPoint(c, minx, midy);
-        CGContextAddArcToPoint(c, minx, miny, midx, miny, ROUND_SIZE);
-        CGContextAddArcToPoint(c, maxx, miny, maxx, midy, ROUND_SIZE);
-        CGContextAddArcToPoint(c, maxx, maxy, midx, maxy, ROUND_SIZE);
-        CGContextAddArcToPoint(c, minx, maxy, minx, midy, ROUND_SIZE);
-        CGContextClosePath(c);
-        CGContextClip(c);
-        CGContextDrawLinearGradient(c, alienGradient, CGPointMake(midx, maxy), CGPointMake(midx, 0), kCGGradientDrawsAfterEndLocation);
-    
-        CGContextDrawPath(c, kCGPathFillStroke);
+        [self drawInnerRowAndShadowInRect:rect inContext:c];
         cachedRender= UIGraphicsGetImageFromCurrentImageContext();
         [_cachedRenders setObject:cachedRender forKey:key];
         UIGraphicsEndImageContext();
@@ -183,8 +198,7 @@ static NSMutableDictionary * _cachedRenders;
 #pragma mark CoreGraphicsViewDrawing
 
 - (void)drawRect:(CGRect)rect {
-    // Drawing code
-    CGImageRef img=[self backgroundImageForRect:rect andPosition:position];
+    CGImageRef img=[self backgroundImageForRect:rect andPosition:_position];
     CGContextRef viewContext = UIGraphicsGetCurrentContext();
     CGContextDrawImage(viewContext, rect, img);
 }

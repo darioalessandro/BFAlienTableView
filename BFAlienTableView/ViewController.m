@@ -23,20 +23,21 @@
         [cell setContentMode:UIViewContentModeRedraw];
         [cell setClipsToBounds:TRUE];
     }
-    BFAlienCellBackgroundView * view= [[BFAlienCellBackgroundView alloc] initWithFrame:cell.frame];
+    
+    if(![[cell backgroundView] isMemberOfClass:[BFAlienCellBackgroundView class]]){
+        BFAlienCellBackgroundView * view= [[BFAlienCellBackgroundView alloc] initWithFrame:cell.frame];
+        [cell setBackgroundView:view];
+    }
+    
     BFAlienCellBackgroundViewPosition position;
     if(indexPath.row==0){
         position=BFAlienCellBackgroundViewPositionTop;
     }else if(indexPath.row==[tableView numberOfRowsInSection:indexPath.section]-1){
         position=BFAlienCellBackgroundViewPositionBottom;
-        cell.clipsToBounds=NO;
-        tableView.clipsToBounds=NO;
     }else{
         position=BFAlienCellBackgroundViewPositionMiddle;
     }
-    [view setPosition:position];
-    [cell setBackgroundView:view];
-    [view setNeedsLayout];
+    [(BFAlienCellBackgroundView *)cell.backgroundView setPosition:position];
     return cell;
 }
 
