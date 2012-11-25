@@ -19,7 +19,7 @@
  *    "This product includes software developed by
  *    Dario Alessandro Lencina Talarico: darioalessandrolencina@gmail.com"
  *
- *    Alternately, this acknowledgment SHOULD in the software itself,
+ *    Alternately, this acknowledgment SHOULD be included in the software itself,
  *    usually where such third-party acknowledgments normally appear,
  *
  *
