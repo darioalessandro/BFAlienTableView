@@ -75,11 +75,11 @@ static NSMutableDictionary * _cachedRenders;
 #pragma mark CoreGraphics Image Drawing.
 
 -(void)CreateAlienGradient:(CGGradientRef *)gradient{
-    size_t num_locations = 4;
-    CGFloat locations[4] = { 0.0, 0.03, 0.85, 1.0 };
-    CGFloat components[16] = {0.08, 0.07, 0.26, 1,  // Start color
-                              0.22,	0.27, 0.54, 1,
-                              0.32,	0.45, 0.69, 1,
+    size_t num_locations = 3;
+    CGFloat locations[4] = { 0.0, 0.85, 1.0 };
+    CGFloat components[16] = {
+                              0.7,	0.7, 0.7, 1,
+                              0.95,	0.95, 0.95, 1,
                               1.00, 1.00, 1.00, 1}; // End color
     
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
@@ -131,6 +131,8 @@ static NSMutableDictionary * _cachedRenders;
     CGContextDrawPath(ctx, kCGPathFillStroke);
 }
 
+#define UIGray [UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:0.8]
+
 -(void)drawOuterCanvasInRect:(CGRect)rect withBottomPositionInContext:(CGContextRef)ctx {
     CGFloat minx = CGRectGetMinX(rect) , midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect) ;
     CGFloat miny = CGRectGetMinY(rect) , maxy = CGRectGetMaxY(rect) ;
@@ -139,7 +141,6 @@ static NSMutableDictionary * _cachedRenders;
     
     maxx = maxx - 1;
     maxy = maxy - 1;
-    
     CGContextMoveToPoint(ctx, minx, miny);
     CGContextAddArcToPoint(ctx, minx, maxy, midx, maxy, ROUND_SIZE);
     CGContextAddArcToPoint(ctx, maxx, maxy, maxx, miny, ROUND_SIZE);
@@ -202,7 +203,7 @@ static NSMutableDictionary * _cachedRenders;
                                                            1, 0, 0, -1, 0, rect.size.height
                                                            );
     CGContextConcatCTM(ctx, flipVertical);
-    CGContextSetFillColorWithColor(ctx, [[UIColor colorWithRed:0.22 green:0.27 blue:0.54 alpha:1] CGColor]);
+    CGContextSetFillColorWithColor(ctx, [[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1] CGColor]);
     CGContextSetStrokeColorWithColor(ctx, [[UIColor clearColor] CGColor]);
 }
 
@@ -215,6 +216,10 @@ static NSMutableDictionary * _cachedRenders;
         [self configureContext:c withRect:rect];
         if(alienGradient==NULL)
             [self CreateAlienGradient:&alienGradient];
+        
+        CGContextSetLineWidth(c,1.0f);
+        CGContextSetStrokeColorWithColor(c, UIGray.CGColor);
+        
         if (viewPosition == BFAlienCellBackgroundViewPositionTop) {
             [self drawOuterCanvasInRect:rect withTopPositionInContext:c];
         } else if (viewPosition == BFAlienCellBackgroundViewPositionBottom) {
